@@ -1,6 +1,7 @@
 export const languages: Record<string, string> = {
   "ACE": "Acehnese",
   "AF": "Afrikaans",
+  "AM": "Amharic",
   "AN": "Aragonese",
   "AR": "Arabic",
   "AS": "Assamese",
@@ -102,6 +103,7 @@ export const languages: Record<string, string> = {
   "TE": "Telugu",
   "TG": "Tajik",
   "TH": "Thai",
+  "TI": "Tigrinya",
   "TK": "Turkmen",
   "TL": "Tagalog",
   "TN": "Tswana",

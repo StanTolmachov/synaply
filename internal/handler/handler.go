@@ -50,7 +50,7 @@ func (h *Handler) Lang(w http.ResponseWriter, r *http.Request) {
 	var Response models.LangResponse
 	Response.Source = models.SortedSourceLanguages
 	Response.Target = models.SortedTargetLanguages
-	slogger.Log.Debug("lang called", Response)
+	slogger.Log.Debug("lang called", "response", Response)
 	JSONResponse(w, http.StatusOK, Response)
 }
 
@@ -433,7 +433,7 @@ func (h *Handler) GetMe(w http.ResponseWriter, r *http.Request) {
 
 // Translate Translate a word
 // @Summary Translate a word
-// @Description Translates a word using DeepL API
+// @Description Translates a word using Gemini API
 // @Tags words
 // @Accept json
 // @Produce json
@@ -453,7 +453,7 @@ func (h *Handler) Translate(w http.ResponseWriter, r *http.Request) {
 		slogger.Log.DebugContext(r.Context(), "Invalid request body in Translate", "err", err)
 		return
 	}
-	if req.SourceWord == "" && req.TargetWord == "" {
+	if strings.TrimSpace(req.SourceWord) == "" && strings.TrimSpace(req.TargetWord) == "" {
 		WriteError(w, http.StatusBadRequest, "Both source and target words are empty")
 		return
 	}
@@ -484,6 +484,10 @@ func (h *Handler) Translate(w http.ResponseWriter, r *http.Request) {
 	slogger.Log.Debug("translate req %+v", "req", req)
 	resp, err := h.wordsService.Translate(ctx, req)
 	if err != nil {
+		if errors.Is(err, gemini.ErrLimitExceeded) {
+			WriteError(w, http.StatusTooManyRequests, "Sorry, but the free mode has ended")
+			return
+		}
 		WriteError(w, http.StatusInternalServerError, "Failed to translate")
 		slogger.Log.ErrorContext(ctx, "Translation failed", "error", err)
 		return

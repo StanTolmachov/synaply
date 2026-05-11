@@ -75,9 +75,39 @@ func NewWordsService(repo repository.WordsRepository, cache cache.CacheRepositor
 }
 
 func (s *wordsService) Translate(ctx context.Context, req models.TranslateReq) (*models.TranslateResp, error) {
-	resp, err := s.gem.WordTranslate(ctx, req)
+	sourceWord := strings.TrimSpace(req.SourceWord)
+	targetWord := strings.TrimSpace(req.TargetWord)
+	if sourceWord == "" && targetWord == "" {
+		return nil, errors.New("source or target word is required")
+	}
+
+	gemReq := &gemini.GemTranslationReq{
+		SourceWord: sourceWord,
+		TargetWord: targetWord,
+		SourceLang: req.SourceLang,
+		TargetLang: req.TargetLang,
+	}
+	resp, err := s.gem.WordTranslate(ctx, gemReq)
 	if err != nil {
 		return nil, err
+	}
+	if resp == nil {
+		return nil, errors.New("translation response is empty")
+	}
+
+	resp.SourceWord = strings.TrimSpace(resp.SourceWord)
+	resp.TargetWord = strings.TrimSpace(resp.TargetWord)
+	if resp.SourceWord == "" {
+		resp.SourceWord = sourceWord
+	}
+	if resp.TargetWord == "" {
+		resp.TargetWord = targetWord
+	}
+	if sourceWord != "" && resp.TargetWord == "" {
+		return nil, errors.New("target word translation is empty")
+	}
+	if sourceWord == "" && targetWord != "" && resp.SourceWord == "" {
+		return nil, errors.New("source word translation is empty")
 	}
 
 	return &models.TranslateResp{

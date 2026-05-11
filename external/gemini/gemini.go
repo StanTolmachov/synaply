@@ -9,7 +9,6 @@ import (
 
 	"google.golang.org/genai"
 
-	"synaply/internal/models"
 	"synaply/slogger"
 )
 
@@ -18,7 +17,7 @@ type Service interface {
 	StartPracticeWithGemini(ctx context.Context, req *PracticeWithGemini, wordList string) (*StartPracticeWithGeminiResponse, error)
 	CheckAnswerPracticeWithGemini(ctx context.Context, req *PracticeWithGemini, translate string) (*CheckAnswerPracticeWithGeminiResponse, error)
 	WordList(ctx context.Context, req WordListReq) ([]WordListResp, error)
-	WordTranslate(ctx context.Context, req models.TranslateReq) (*GemTranslationResp, error)
+	WordTranslate(ctx context.Context, req *GemTranslationReq) (*GemTranslationResp, error)
 }
 
 type service struct {
@@ -437,12 +436,7 @@ Use exactly this JSON schema:
   "TargetWord": "<word in Target Language>"
 }`
 
-type GemTranslationResp struct {
-	SourceWord string
-	TargetWord string
-}
-
-func (s *service) WordTranslate(ctx context.Context, req models.TranslateReq) (*GemTranslationResp, error) {
+func (s *service) WordTranslate(ctx context.Context, req *GemTranslationReq) (*GemTranslationResp, error) {
 	var systemPrompt string
 	if req.SourceWord != "" {
 		systemPrompt = fmt.Sprintf(
