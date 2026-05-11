@@ -33,15 +33,15 @@ func RegisterRoutes(h *Handler, jwtSecret string) *chi.Mux {
 	r.Get("/swagger/*", httpSwagger.WrapHandler)
 
 	r.Route("/api/v1/", func(r chi.Router) {
-		r.Use(httprate.LimitByIP(100, 1*time.Minute))
+		r.Use(httprate.LimitByIP(100000, 1*time.Minute))
 
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.TimeoutMiddleware(time.Second * 5))
 
 			r.Route("/users", func(r chi.Router) {
 				r.Get("/lang", h.Lang)
-				r.With(httprate.LimitByIP(500, 1*time.Hour)).Post("/create", h.Create)
-				r.With(httprate.LimitByIP(500, 1*time.Hour)).Post("/login", h.Login)
+				r.With(httprate.LimitByIP(1000, 1*time.Hour)).Post("/create", h.Create)
+				r.With(httprate.LimitByIP(1000, 1*time.Hour)).Post("/login", h.Login)
 
 				r.Group(func(r chi.Router) {
 					r.Use(middleware.AuthMidleware(jwtSecret))
@@ -95,8 +95,8 @@ func RegisterRoutes(h *Handler, jwtSecret string) *chi.Mux {
 				r.Use(middleware.TimeoutMiddleware(time.Second * 5))
 
 				r.Route("/words", func(r chi.Router) {
-					r.With(httprate.LimitByIP(30, 1*time.Minute)).Post("/create", h.NewWord)
-					r.With(httprate.LimitByIP(20, 1*time.Minute)).Post("/translate", h.Translate)
+					r.With(httprate.LimitByIP(3000, 1*time.Minute)).Post("/create", h.NewWord)
+					r.With(httprate.LimitByIP(2000, 1*time.Minute)).Post("/translate", h.Translate)
 					r.Get("/GetMe", h.GetMe)
 					r.Get("/", h.GetWordsList)
 					r.Get("/stats", h.GetProgressStats)
@@ -114,13 +114,13 @@ func RegisterRoutes(h *Handler, jwtSecret string) *chi.Mux {
 			r.Group(func(r chi.Router) {
 				r.Use(middleware.TimeoutMiddleware(time.Second * 30))
 
-				r.With(httprate.LimitByIP(10, 1*time.Minute)).Post("/words/wordInfo", h.WordInfo)
+				r.With(httprate.LimitByIP(1000, 1*time.Minute)).Post("/words/wordInfo", h.WordInfo)
 
-				r.With(httprate.LimitByIP(10, 1*time.Minute)).Post("/practice/startPractice", h.StartPracticeWithGemini)
-				r.With(httprate.LimitByIP(10, 1*time.Minute)).Post("/practice/checkAnswerPractice", h.CheckAnswerPracticeWithGemini)
+				r.With(httprate.LimitByIP(1000, 1*time.Minute)).Post("/practice/startPractice", h.StartPracticeWithGemini)
+				r.With(httprate.LimitByIP(1000, 1*time.Minute)).Post("/practice/checkAnswerPractice", h.CheckAnswerPracticeWithGemini)
 				r.Post("/practice/finishPractice", h.FinishPracticeWithGemini)
-				r.With(httprate.LimitByIP(10, 1*time.Minute)).Post("/words/wordList", h.WordList)
-				r.With(httprate.LimitByIP(5, 1*time.Minute)).Post("/words/create-batch", h.CreateBatchWords)
+				r.With(httprate.LimitByIP(1000, 1*time.Minute)).Post("/words/wordList", h.WordList)
+				r.With(httprate.LimitByIP(1000, 1*time.Minute)).Post("/words/create-batch", h.CreateBatchWords)
 			})
 		})
 	})
