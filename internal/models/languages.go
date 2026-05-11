@@ -45,6 +45,7 @@ func sortLanguagesMap(langMap map[string]string) []LangItem {
 var SourceLanguages = map[string]string{
 	"ACE": "Acehnese",
 	"AF":  "Afrikaans",
+	"AM":  "Amharic",
 	"AN":  "Aragonese",
 	"AR":  "Arabic",
 	"AS":  "Assamese",
@@ -141,6 +142,7 @@ var SourceLanguages = map[string]string{
 	"TE":  "Telugu",
 	"TG":  "Tajik", //
 	"TH":  "Thai",
+	"TI":  "Tigrinya",
 	"TK":  "Turkmen",
 	"TL":  "Tagalog",
 	"TN":  "Tswana",
@@ -164,6 +166,7 @@ var SourceLanguages = map[string]string{
 var TargetLanguages = map[string]string{
 	"ACE":     "Acehnese",
 	"AF":      "Afrikaans",
+	"AM":      "Amharic",
 	"AN":      "Aragonese",
 	"AR":      "Arabic",
 	"AS":      "Assamese",
@@ -265,6 +268,7 @@ var TargetLanguages = map[string]string{
 	"TE":      "Telugu",
 	"TG":      "Tajik",
 	"TH":      "Thai",
+	"TI":      "Tigrinya",
 	"TK":      "Turkmen",
 	"TL":      "Tagalog",
 	"TN":      "Tswana",
