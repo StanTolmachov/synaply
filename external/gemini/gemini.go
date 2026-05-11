@@ -9,6 +9,7 @@ import (
 
 	"google.golang.org/genai"
 
+	"synaply/internal/models"
 	"synaply/slogger"
 )
 
@@ -17,6 +18,7 @@ type Service interface {
 	StartPracticeWithGemini(ctx context.Context, req *PracticeWithGemini, wordList string) (*StartPracticeWithGeminiResponse, error)
 	CheckAnswerPracticeWithGemini(ctx context.Context, req *PracticeWithGemini, translate string) (*CheckAnswerPracticeWithGeminiResponse, error)
 	WordList(ctx context.Context, req WordListReq) ([]WordListResp, error)
+	WordTranslate(ctx context.Context, req models.TranslateReq) (*GemTranslationResp, error)
 }
 
 type service struct {
@@ -405,4 +407,103 @@ func extractJSON(s string) string {
 	}
 
 	return s[start : end+1]
+}
+
+const WordTranslatePromptTemplate = `You are a precise bilingual translation algorithm.
+
+Source Language Code: "%[1]s"
+Target Language Code: "%[2]s"
+Source Word (optional): "%[3]q"
+Target Word (optional): "%[4]q"
+
+First, identify the actual Source and Target languages based on the codes and provided words.
+
+YOUR TASK:
+- If "Source Word" is provided, translate it into the Target Language.
+- If "Target Word" is provided, translate it into the Source Language.
+- If both are provided, prioritize "Source Word" -> "Target Language".
+- Return one clear dictionary-form translation (base form, no explanations).
+
+CRITICAL RULES:
+1. Output must be STRICTLY valid JSON.
+2. Do not use markdown code blocks.
+3. Do not add extra text outside JSON.
+4. Preserve original script/case where appropriate.
+5. For multi-word inputs, return the natural equivalent phrase.
+
+Use exactly this JSON schema:
+{
+  "SourceWord": "<word in Source Language>",
+  "TargetWord": "<word in Target Language>"
+}`
+
+type GemTranslationResp struct {
+	SourceWord string
+	TargetWord string
+}
+
+func (s *service) WordTranslate(ctx context.Context, req models.TranslateReq) (*GemTranslationResp, error) {
+	var systemPrompt string
+	if req.SourceWord != "" {
+		systemPrompt = fmt.Sprintf(
+			WordTranslatePromptTemplate,
+			req.SourceLang,
+			req.TargetLang,
+			req.SourceWord,
+			"",
+		)
+	} else {
+		systemPrompt = fmt.Sprintf(
+			WordTranslatePromptTemplate,
+			req.SourceLang,
+			req.TargetLang,
+			"",
+			req.TargetWord,
+		)
+	}
+
+	config := &genai.GenerateContentConfig{
+		SystemInstruction: &genai.Content{
+			Parts: []*genai.Part{
+				{Text: systemPrompt},
+			},
+		},
+		Temperature:      genai.Ptr[float32](0.1),
+		ResponseMIMEType: "application/json",
+	}
+
+	result, err := s.client.Models.GenerateContent(
+		ctx,
+		s.Model,
+		genai.Text("Generate the translation according to the system instructions."),
+		config)
+
+	if err != nil {
+		slogger.Log.ErrorContext(ctx, "Genai client response error", "error", err)
+		if strings.Contains(err.Error(), "429") || strings.Contains(strings.ToLower(err.Error()), "quota") {
+			return nil, ErrLimitExceeded
+		}
+		return nil, fmt.Errorf("failed to generate content: %w", err)
+	}
+
+	if result == nil || result.Text() == "" {
+		slogger.Log.ErrorContext(ctx, "Gemini returned empty result for WordList", "request", req)
+		return nil, fmt.Errorf("no result from Gemini")
+	}
+
+	slogger.Log.DebugContext(ctx, "Gemini translation raw response", "text", result.Text())
+
+	cleanJSON := extractJSON(result.Text())
+	if cleanJSON == "" {
+		slogger.Log.ErrorContext(ctx, "failed to extract JSON from gemini response", "text", result.Text(), "request", req)
+		return nil, fmt.Errorf("failed to extract JSON from gemini response")
+	}
+
+	var resp GemTranslationResp
+	if err := json.Unmarshal([]byte(cleanJSON), &resp); err != nil {
+		slogger.Log.ErrorContext(ctx, "failed to unmarshal gemini response", "error", err, "text", result.Text(), "request", req)
+		return nil, fmt.Errorf("failed to unmarshal gemini response: %w", err)
+	}
+
+	return &resp, nil
 }

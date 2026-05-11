@@ -75,39 +75,15 @@ func NewWordsService(repo repository.WordsRepository, cache cache.CacheRepositor
 }
 
 func (s *wordsService) Translate(ctx context.Context, req models.TranslateReq) (*models.TranslateResp, error) {
-	var deeplReq deepl.Request
-
-	if req.SourceWord != "" {
-		deeplReq = deepl.Request{
-			Text:       []string{req.SourceWord},
-			TargetLang: req.TargetLang,
-		}
-
-		deeplResp, err := s.deepl.Translate(ctx, deeplReq)
-		if err != nil {
-			return nil, err
-		}
-
-		return &models.TranslateResp{
-			ID:         req.ID,
-			SourceWord: req.SourceWord,
-			TargetWord: deeplResp.Translations[0].Text,
-		}, nil
-	}
-	deeplReq = deepl.Request{
-		Text:       []string{req.TargetWord},
-		TargetLang: req.SourceLang,
-		SourceLang: req.TargetLang,
-	}
-	deeplResp, err := s.deepl.Translate(ctx, deeplReq)
+	resp, err := s.gem.WordTranslate(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
 	return &models.TranslateResp{
 		ID:         req.ID,
-		SourceWord: deeplResp.Translations[0].Text,
-		TargetWord: req.TargetWord,
+		SourceWord: resp.SourceWord,
+		TargetWord: resp.TargetWord,
 	}, nil
 
 }
