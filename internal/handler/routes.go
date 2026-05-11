@@ -96,7 +96,7 @@ func RegisterRoutes(h *Handler, jwtSecret string) *chi.Mux {
 
 				r.Route("/words", func(r chi.Router) {
 					r.With(httprate.LimitByIP(3000, 1*time.Minute)).Post("/create", h.NewWord)
-					r.With(httprate.LimitByIP(2000, 1*time.Minute)).Post("/translate", h.Translate)
+
 					r.Get("/GetMe", h.GetMe)
 					r.Get("/", h.GetWordsList)
 					r.Get("/stats", h.GetProgressStats)
@@ -114,6 +114,7 @@ func RegisterRoutes(h *Handler, jwtSecret string) *chi.Mux {
 			r.Group(func(r chi.Router) {
 				r.Use(middleware.TimeoutMiddleware(time.Second * 30))
 
+				r.With(httprate.LimitByIP(2000, 1*time.Minute)).Post("/words/translate", h.Translate)
 				r.With(httprate.LimitByIP(1000, 1*time.Minute)).Post("/words/wordInfo", h.WordInfo)
 
 				r.With(httprate.LimitByIP(1000, 1*time.Minute)).Post("/practice/startPractice", h.StartPracticeWithGemini)
