@@ -75,39 +75,45 @@ func NewWordsService(repo repository.WordsRepository, cache cache.CacheRepositor
 }
 
 func (s *wordsService) Translate(ctx context.Context, req models.TranslateReq) (*models.TranslateResp, error) {
-	var deeplReq deepl.Request
-
-	if req.SourceWord != "" {
-		deeplReq = deepl.Request{
-			Text:       []string{req.SourceWord},
-			TargetLang: req.TargetLang,
-		}
-
-		deeplResp, err := s.deepl.Translate(ctx, deeplReq)
-		if err != nil {
-			return nil, err
-		}
-
-		return &models.TranslateResp{
-			ID:         req.ID,
-			SourceWord: req.SourceWord,
-			TargetWord: deeplResp.Translations[0].Text,
-		}, nil
+	sourceWord := strings.TrimSpace(req.SourceWord)
+	targetWord := strings.TrimSpace(req.TargetWord)
+	if sourceWord == "" && targetWord == "" {
+		return nil, errors.New("source or target word is required")
 	}
-	deeplReq = deepl.Request{
-		Text:       []string{req.TargetWord},
-		TargetLang: req.SourceLang,
-		SourceLang: req.TargetLang,
+
+	gemReq := &gemini.GemTranslationReq{
+		SourceWord: sourceWord,
+		TargetWord: targetWord,
+		SourceLang: req.SourceLang,
+		TargetLang: req.TargetLang,
 	}
-	deeplResp, err := s.deepl.Translate(ctx, deeplReq)
+	resp, err := s.gem.WordTranslate(ctx, gemReq)
 	if err != nil {
 		return nil, err
+	}
+	if resp == nil {
+		return nil, errors.New("translation response is empty")
+	}
+
+	resp.SourceWord = strings.TrimSpace(resp.SourceWord)
+	resp.TargetWord = strings.TrimSpace(resp.TargetWord)
+	if resp.SourceWord == "" {
+		resp.SourceWord = sourceWord
+	}
+	if resp.TargetWord == "" {
+		resp.TargetWord = targetWord
+	}
+	if sourceWord != "" && resp.TargetWord == "" {
+		return nil, errors.New("target word translation is empty")
+	}
+	if sourceWord == "" && targetWord != "" && resp.SourceWord == "" {
+		return nil, errors.New("source word translation is empty")
 	}
 
 	return &models.TranslateResp{
 		ID:         req.ID,
-		SourceWord: deeplResp.Translations[0].Text,
-		TargetWord: req.TargetWord,
+		SourceWord: resp.SourceWord,
+		TargetWord: resp.TargetWord,
 	}, nil
 
 }
