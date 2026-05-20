@@ -8,7 +8,8 @@ interface I18nContextProps {
   lang: string;
   setLang: (lang: string, saveToLocal?: boolean) => void;
   resetToSaved: () => void;
-  t: (path: string, params?: Record<string, string | number>) => string;
+  t: (path: string, params?: Record<string, any>) => any;
+  tHtml: (path: string, params?: Record<string, any>) => string;
 }
 
 const I18nContext = createContext<I18nContextProps | undefined>(undefined);
@@ -101,30 +102,73 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   };
 
   // Адаптер для старого t() метода, чтобы не переписывать все компоненты сразу
-  const t = (path: string, params?: Record<string, string | number>): string => {
+  const t = (path: string, params?: Record<string, any>): any => {
     try {
-      const htmlHandlers: Record<string, (chunks: ReactNode) => string> = {
-        strong: (chunks) => `<strong>${chunks}</strong>`,
-        b: (chunks) => `<b>${chunks}</b>`,
-        i: (chunks) => `<i>${chunks}</i>`,
-        br: () => `<br/>`
+      const htmlHandlers: Record<string, (chunks: ReactNode) => any> = {
+        strong: (chunks) => <strong>{chunks}</strong>,
+        b: (chunks) => <b>{chunks}</b>,
+        i: (chunks) => <i>{chunks}</i>,
+        em: (chunks) => <em>{chunks}</em>,
+        u: (chunks) => <u>{chunks}</u>,
+        br: () => <br/>
       };
 
       // next-intl useTranslations() t function handles nested keys with dots by default
       // but if it fails, we want to return the path as a fallback
-      const result = (tNext as any)(path, { ...params, ...htmlHandlers });
+      // result is a React element if rich text is used, or a string otherwise
+      const result = tNext.rich(path as any, { 
+        ...htmlHandlers,
+        ...params
+      });
       
-      // If the result is the same as the path, it might mean the translation is missing
-      // (though next-intl might throw an error or return the key depending on config)
+      // If the result is the same as the path, it might be because next-intl 
+      // returns the key if it's missing (depending on configuration)
       return result;
     } catch (e) {
-      // Если ключ не найден, возвращаем сам путь (как и в старой реализации)
-      return path;
+      // If rich fails, try simple t
+      try {
+        return tNext(path as any, params);
+      } catch (e2) {
+        // Если ключ не найден, возвращаем сам путь
+        return path;
+      }
+    }
+  };
+
+  // Специальная версия t для dangerouslySetInnerHTML
+  const tHtml = (path: string, params?: Record<string, any>): string => {
+    try {
+      const stringHandlers: Record<string, (chunks: ReactNode) => string> = {
+        strong: (chunks) => `<strong>${chunks}</strong>`,
+        b: (chunks) => `<b>${chunks}</b>`,
+        i: (chunks) => `<i>${chunks}</i>`,
+        em: (chunks) => `<em>${chunks}</em>`,
+        u: (chunks) => `<u>${chunks}</u>`,
+        br: () => `<br/>`
+      };
+
+      // next-intl's rich text expects <tag></tag> or <tag/>.
+      // If the source JSON has <br/>, we need to make sure next-intl
+      // processes it as a rich text tag.
+      
+      const result = (tNext.rich as any)(path, { 
+        ...stringHandlers,
+        ...params
+      });
+      
+      return typeof result === 'string' ? result : (Array.isArray(result) ? result.join('') : String(result));
+    } catch (e) {
+      try {
+        const result = (tNext as any)(path, params);
+        return typeof result === 'string' ? result : path;
+      } catch (e2) {
+        return path;
+      }
     }
   };
 
   return (
-    <I18nContext.Provider value={{ lang: locale, setLang, resetToSaved, t }}>
+    <I18nContext.Provider value={{ lang: locale, setLang, resetToSaved, t, tHtml }}>
       {children}
     </I18nContext.Provider>
   );

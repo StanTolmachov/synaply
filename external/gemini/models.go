@@ -68,3 +68,14 @@ type WordListReq struct {
 	Topic      string
 	UserTopic  string
 }
+type GemTranslationResp struct {
+	SourceWord string
+	TargetWord string
+}
+
+type GemTranslationReq struct {
+	SourceWord string
+	TargetWord string
+	SourceLang string
+	TargetLang string
+}

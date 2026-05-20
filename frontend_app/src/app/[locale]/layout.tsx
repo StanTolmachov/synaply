@@ -38,8 +38,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     languageAlternates[code] = `${baseUrl}/${code}`;
   });
 
-  // Добавляем x-default (fallback на английский)
-  languageAlternates['x-default'] = `${baseUrl}/en`;
+  // Добавляем x-default (отправляет на корень /)
+  languageAlternates['x-default'] = baseUrl;
 
   // Специфические для Next.js настройки Open Graph локали
   const ogLocales: Record<string, string> = {
@@ -64,11 +64,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     },
     icons: {
       icon: [
-        { url: "/favicon.ico?v=2", type: "image/x-icon" },
-        { url: "/favicon.png?v=2", type: "image/png" },
-        { url: "/favicon.png?v=2", type: "image/png", rel: "shortcut icon" }
+        { url: "/favicon.ico?v=3", type: "image/x-icon" },
+        { url: "/favicon.png?v=3", type: "image/png" },
+        { url: "/icon-192.png?v=3", type: "image/png", sizes: "192x192" },
+        { url: "/icon-512.png?v=3", type: "image/png", sizes: "512x512" },
       ],
-      apple: "/apple-icon.png?v=2",
+      apple: "/apple-icon.png?v=3",
     },
     openGraph: {
       title: t('og_title') || t('title'),
@@ -130,9 +131,41 @@ export default async function RootLayout({
   // Получаем сообщения для провайдера
   const messages = await getMessages();
 
+  const baseUrl = "https://synaply.me";
+  const orgJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Synaply',
+    url: baseUrl,
+    logo: `${baseUrl}/icon-512.png`,
+    sameAs: [
+      'https://twitter.com/SynaplyTeam',
+    ],
+  };
+
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Synaply',
+    url: baseUrl,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${baseUrl}/{locale}/public-lists?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  };
+
   return (
     <html lang={locale} className="h-full" suppressHydrationWarning>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `

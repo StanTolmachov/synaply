@@ -50,9 +50,9 @@
     "all": "Alle",
     "reset": "Zurücksetzen",
     "admin_stats": "Admin Stats",
-    "terms": "Terms of Service",
-    "all_rights_reserved": "All rights reserved.",
-    "footer_help_text": "Help us improve! Share your ideas, report bugs, or request features:"
+    "terms": "Nutzungsbedingungen",
+    "all_rights_reserved": "Alle Rechte vorbehalten.",
+    "footer_help_text": "Helfen Sie uns besser zu werden! Teilen Sie Ihre Ideen, melden Sie Fehler oder wünschen Sie sich Funktionen:"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -288,24 +288,24 @@
     "update_success": "Profil erfolgreich aktualisiert!",
     "update_error": "Profilaktualisierung fehlgeschlagen",
     "subtitle": "Verwalten Sie Ihre persönlichen Informationen und Spracheinstellungen",
-    "terms_last_updated": "Last updated: March 23, 2026",
-    "terms_beta_warning": "Important Beta Notice: Synaply is currently in its beta testing phase. By using this service, you acknowledge that you are participating in a testing period and understand the risks associated with pre-release software.",
-    "terms_intro_title": "1. Acceptance of Terms",
-    "terms_intro_text": "By accessing or using Synaply, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.",
-    "terms_beta_title": "2. Beta Disclaimer and Data Loss",
-    "terms_beta_text": "Synaply is provided on an \"as is\" and \"as available\" basis for beta testing purposes. You explicitly acknowledge and agree that: (a) The service may contain bugs, errors, and experience frequent interruptions. (b) We reserve the right to modify, suspend, or discontinue any part of the service at any time without notice. (c) CRITICAL: During the beta period, we may perform database resets or deletions. This means all your data, including progress, word lists, and account information, may be permanently deleted without prior warning. You are responsible for maintaining your own backups of any important data.",
-    "terms_accounts_title": "3. User Accounts",
-    "terms_accounts_text": "To use certain features, you must register for an account. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You must notify us immediately of any unauthorized use of your account.",
-    "terms_content_title": "4. Content and Intellectual Property",
-    "terms_content_text": "Our service allows you to post, link, store, share and otherwise make available certain information, text, graphics, or other material. You are responsible for the content you post. Synaply retains all rights to its original content, features, and functionality, which are protected by international copyright, trademark, and other intellectual property laws.",
-    "terms_conduct_title": "5. Prohibited Conduct",
-    "terms_conduct_text": "You agree not to use the service for any unlawful purpose or to solicit others to perform or participate in any unlawful acts. You shall not attempt to interfere with the proper working of the service, including through viruses, denial of service attacks, or any other harmful technology.",
-    "terms_liability_title": "6. Limitation of Liability",
-    "terms_liability_text": "In no event shall Synaply, nor its directors, employees, partners, or agents, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the service.",
-    "terms_changes_title": "7. Changes to Terms",
-    "terms_changes_text": "We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will try to provide at least 30 days' notice prior to any new terms taking effect for significant changes. What constitutes a material change will be determined at our sole discretion.",
-    "terms_contact_title": "8. Contact Us",
-    "terms_contact_text": "If you have any questions about these Terms, please contact us through the support channels provided on the website."
+    "terms_last_updated": "Zuletzt aktualisiert: 23. März 2026",
+    "terms_beta_warning": "Wichtiger Beta-Hinweis: Synaply befindet sich derzeit in der Beta-Testphase. Durch die Nutzung dieses Dienstes erkennen Sie an, dass Sie an einer Testphase teilnehmen und die Risiken von Vorab-Software verstehen.",
+    "terms_intro_title": "1. Annahme der Bedingungen",
+    "terms_intro_text": "Durch den Zugriff auf oder die Nutzung von Synaply stimmen Sie diesen Nutzungsbedingungen sowie allen anwendbaren Gesetzen und Vorschriften zu. Wenn Sie mit einem dieser Bedingungen nicht einverstanden sind, ist die Nutzung oder der Zugriff auf diese Website untersagt.",
+    "terms_beta_title": "2. Beta-Haftungsausschluss und Datenverlust",
+    "terms_beta_text": "Synaply wird \"as is\" und \"as available\" für Beta-Testzwecke bereitgestellt. Sie erkennen ausdrücklich an und stimmen zu, dass: (a) Der Dienst Bugs, Fehler enthalten kann und häufige Unterbrechungen aufweist. (b) Wir uns das Recht vorbehalten, Teile des Dienstes jederzeit ohne Vorankündigung zu ändern, auszusetzen oder einzustellen. (c) KRITISCH: Während der Beta-Periode können wir Datenbank-Resets oder -Löschungen durchführen. Das bedeutet, dass alle Ihre Daten, einschließlich Fortschritt, Wortlisten und Kontoinformationen, ohne Vorwarnung dauerhaft gelöscht werden können. Sie sind für die Sicherung Ihrer wichtigen Daten selbst verantwortlich.",
+    "terms_accounts_title": "3. Benutzerkonten",
+    "terms_accounts_text": "Um bestimmte Funktionen zu nutzen, müssen Sie ein Konto registrieren. Sie sind für die Vertraulichkeit Ihrer Kontoanmeldedaten und alle Aktivitäten, die unter Ihrem Konto auftreten, verantwortlich. Sie müssen uns umgehend über jede unbefugte Nutzung Ihres Kontos informieren.",
+    "terms_content_title": "4. Inhalt und geistiges Eigentum",
+    "terms_content_text": "Unser Dienst ermöglicht es Ihnen, bestimmte Informationen, Texte, Grafiken oder anderes Material zu posten, zu verlinken, zu speichern, zu teilen und anderweitig verfügbar zu machen. Sie sind für den von Ihnen geposteten Inhalt verantwortlich. Synaply behält sich alle Rechte an seinem ursprünglichen Inhalt, Funktionen und Funktionalitäten vor, die durch internationales Urheberrecht, Markenrecht und andere Gesetze zum geistigen Eigentum geschützt sind.",
+    "terms_conduct_title": "5. Verbotenes Verhalten",
+    "terms_conduct_text": "Sie stimmen zu, den Dienst nicht für unrechtmäßige Zwecke zu nutzen oder andere zu bitten, unrechtmäßige Handlungen auszuführen oder daran teilzunehmen. Sie dürfen nicht versuchen, die ordnungsgemäße Funktion des Dienstes zu stören, einschließlich durch Viren, Denial-of-Service-Angriffe oder andere schädliche Technologien.",
+    "terms_liability_title": "6. Haftungsbeschränkung",
+    "terms_liability_text": "Synaply, seine Direktoren, Mitarbeiter, Partner oder Agenten haften in keinem Fall für indirekte, zufällige, spezielle, folgende oder strafrechtliche Schäden, einschließlich ohne Einschränkung Verlust von Gewinn, Daten, Nutzung, Goodwill oder anderen immateriellen Verlusten, die aus Ihrem Zugriff auf oder Ihrer Nutzung des Dienstes oder der Unfähigkeit, darauf zuzugreifen oder ihn zu nutzen, resultieren.",
+    "terms_changes_title": "7. Änderungen der Bedingungen",
+    "terms_changes_text": "Wir behalten uns das Recht vor, diese Bedingungen nach eigenem Ermessen jederzeit zu ändern oder zu ersetzen. Wir versuchen, mindestens 30 Tage Vorankündigung vor Inkrafttreten neuer Bedingungen für wesentliche Änderungen zu geben. Was eine wesentliche Änderung darstellt, entscheiden wir nach eigenem Ermessen.",
+    "terms_contact_title": "8. Kontaktieren Sie uns",
+    "terms_contact_text": "Wenn Sie Fragen zu diesen Bedingungen haben, kontaktieren Sie uns bitte über die auf der Website bereitgestellten Support-Kanäle."
   },
   "login": {
     "title": "Bei Synaply anmelden",
@@ -327,8 +327,8 @@
     "signing_up": "Wird registriert...",
     "has_account": "Haben Sie bereits ein Konto?",
     "login": "Hier anmelden",
-    "terms_acceptance_prefix": "I agree to the",
-    "terms_acceptance_link": "Terms of Service",
+    "terms_acceptance_prefix": "Ich stimme den",
+    "terms_acceptance_link": "Nutzungsbedingungen",
     "terms_acceptance_suffix": ""
   },
   "help": {
@@ -399,18 +399,18 @@
       "desc": "Ihre Punktzahl (im Header der App) zeigt die Anzahl der korrekt übersetzten Wörter an. Je höher die Punktzahl, desto mehr Wörter haben Sie erfolgreich gemeistert!"
     }
   },
-  "not_authorized_admin": "You do not have administrator permissions to view this page.",
+  "not_authorized_admin": "Sie haben keine Administratorberechtigungen, um diese Seite anzuzeigen.",
   "admin": {
-    "title": "Application Statistics",
-    "total_users": "Total Users",
-    "total_words": "Total Words",
-    "total_lessons": "Words Learned",
-    "total_public_lists": "Public Lists",
+    "title": "Anwendungsstatistiken",
+    "total_users": "Gesamte Nutzer",
+    "total_words": "Gesamte Wörter",
+    "total_lessons": "Gelernte Wörter",
+    "total_public_lists": "Öffentliche Listen",
     "total_playlists": "Playlists",
-    "new_users_24h": "New (24h)",
-    "refresh": "Refresh",
-    "users_table_title": "User List",
-    "search_users_placeholder": "Search by email or name...",
-    "system_health": "System Health"
+    "new_users_24h": "Neu (24h)",
+    "refresh": "Aktualisieren",
+    "users_table_title": "Nutzerliste",
+    "search_users_placeholder": "Nach E-Mail oder Name suchen...",
+    "system_health": "Systemzustand"
   }
 }

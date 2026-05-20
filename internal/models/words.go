@@ -105,7 +105,9 @@ type Lesson struct {
 	State         fsrs.State
 	LastReview    time.Time
 	//index for order
-	Index int
+	Index             int
+	MistakesInSession int
+	FSRSLocked        bool
 }
 
 func LessonToLessonDB(lesson *Lesson) modelsDB.LessonDB {

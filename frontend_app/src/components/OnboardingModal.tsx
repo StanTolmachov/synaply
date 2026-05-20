@@ -9,7 +9,7 @@ interface OnboardingModalProps {
 }
 
 export function OnboardingModal({ onClose }: OnboardingModalProps) {
-  const { t } = useTranslation();
+  const { t, tHtml } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export function OnboardingModal({ onClose }: OnboardingModalProps) {
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white shadow-md">1</div>
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg">{t('dashboard.onboarding.step1_title')}</h4>
-                  <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: t('dashboard.onboarding.step1_desc') }} />
+                  <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: tHtml('dashboard.onboarding.step1_desc') }} />
                 </div>
               </div>
               
@@ -72,7 +72,7 @@ export function OnboardingModal({ onClose }: OnboardingModalProps) {
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white shadow-md">2</div>
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg">{t('dashboard.onboarding.step2_title')}</h4>
-                  <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: t('dashboard.onboarding.step2_desc') }} />
+                  <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: tHtml('dashboard.onboarding.step2_desc') }} />
                 </div>
               </div>
               
@@ -80,7 +80,7 @@ export function OnboardingModal({ onClose }: OnboardingModalProps) {
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white shadow-md">3</div>
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg">{t('dashboard.onboarding.step3_title')}</h4>
-                  <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: t('dashboard.onboarding.step3_desc') }} />
+                  <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: tHtml('dashboard.onboarding.step3_desc') }} />
                 </div>
               </div>
             </div>

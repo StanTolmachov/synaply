@@ -49,10 +49,10 @@
     "filters": "Filtros",
     "all": "Todos",
     "reset": "Restablecer",
-    "admin_stats": "Admin Stats",
-    "terms": "Terms of Service",
-    "all_rights_reserved": "All rights reserved.",
-    "footer_help_text": "Help us improve! Share your ideas, report bugs, or request features:"
+    "admin_stats": "Estadísticas de admin",
+    "terms": "Términos de servicio",
+    "all_rights_reserved": "Todos los derechos reservados.",
+    "footer_help_text": "¡Ayúdanos a mejorar! Comparte tus ideas, informa de errores o solicita funciones:"
   },
   "dashboard": {
     "title": "Panel de control",
@@ -327,8 +327,8 @@
     "signing_up": "Registrando...",
     "has_account": "¿Ya tienes una cuenta?",
     "login": "Inicia sesión aquí",
-    "terms_acceptance_prefix": "I agree to the",
-    "terms_acceptance_link": "Terms of Service",
+    "terms_acceptance_prefix": "Acepto los",
+    "terms_acceptance_link": "Términos de servicio",
     "terms_acceptance_suffix": ""
   },
   "help": {
@@ -399,18 +399,18 @@
       "desc": "Tu puntuación (en la cabecera de la aplicación) muestra el número de palabras traducidas correctamente. ¡Cuanto mayor sea la puntuación, más palabras habrás dominado con éxito!"
     }
   },
-  "not_authorized_admin": "You do not have administrator permissions to view this page.",
+  "not_authorized_admin": "No tienes permisos de administrador para ver esta página.",
   "admin": {
-    "title": "Application Statistics",
-    "total_users": "Total Users",
-    "total_words": "Total Words",
-    "total_lessons": "Words Learned",
-    "total_public_lists": "Public Lists",
-    "total_playlists": "Playlists",
-    "new_users_24h": "New (24h)",
-    "refresh": "Refresh",
-    "users_table_title": "User List",
-    "search_users_placeholder": "Search by email or name...",
-    "system_health": "System Health"
+    "title": "Estadísticas de la aplicación",
+    "total_users": "Total usuarios",
+    "total_words": "Total palabras",
+    "total_lessons": "Palabras aprendidas",
+    "total_public_lists": "Listas públicas",
+    "total_playlists": "Listas de reproducción",
+    "new_users_24h": "Nuevos (24h)",
+    "refresh": "Actualizar",
+    "users_table_title": "Lista de usuarios",
+    "search_users_placeholder": "Buscar por correo o nombre...",
+    "system_health": "Salud del sistema"
   }
 }

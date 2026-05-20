@@ -133,16 +133,20 @@ export function Header() {
           {t('common.admin_stats')}
         </Link>
       )}
-      {!isHelpPage && (
-        <Link
-          href="/help"
-          target="_blank"
-          className="text-gray-600 dark:text-gray-300 hover:text-synaply-blue dark:hover:text-synaply-cyan flex items-center text-sm font-medium transition-colors py-2 px-3 hover:bg-synaply-blue/5 dark:hover:bg-synaply-cyan/10 rounded-md md:flex"
-        >
-          <HelpCircle className="w-4 h-4 mr-2 md:mr-1 text-gray-400" />
-          {t('common.help')}
-        </Link>
-      )}
+      <Link
+        href="/public-lists"
+        className="text-gray-600 dark:text-gray-300 hover:text-synaply-blue dark:hover:text-synaply-cyan flex items-center text-sm font-medium transition-colors py-2 px-3 hover:bg-synaply-blue/5 dark:hover:bg-synaply-cyan/10 rounded-md md:flex"
+      >
+        <List className="w-4 h-4 mr-2 md:mr-1 text-orange-500" />
+        {t('dashboard.public_lists.title')}
+      </Link>
+      <Link
+        href="/help"
+        className="text-gray-600 dark:text-gray-300 hover:text-synaply-blue dark:hover:text-synaply-cyan flex items-center text-sm font-medium transition-colors py-2 px-3 hover:bg-synaply-blue/5 dark:hover:bg-synaply-cyan/10 rounded-md md:flex"
+      >
+        <HelpCircle className="w-4 h-4 mr-2 md:mr-1 text-blue-500" />
+        {t('common.help')}
+      </Link>
       <div className="h-px bg-gray-100 dark:bg-gray-800 my-1 hidden md:block" />
       <button
         onClick={handleLogout}

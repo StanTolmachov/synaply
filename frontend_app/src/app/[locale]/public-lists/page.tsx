@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { languages } from '@/lib/languages';
 import PublicListsClient from './PublicListsClient';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -7,11 +8,19 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const tLists = await getTranslations({ locale, namespace: 'dashboard.public_lists' });
   const baseUrl = "https://synaply.me";
 
+  const languageAlternates: Record<string, string> = {};
+  Object.keys(languages).forEach((langCode) => {
+    const code = langCode.toLowerCase();
+    languageAlternates[code] = `${baseUrl}/${code}/public-lists`;
+  });
+  languageAlternates['x-default'] = `${baseUrl}/public-lists`;
+
   return {
     title: `${tLists('title')} | Synaply`,
     description: tLists('subtitle'),
     alternates: {
       canonical: `${baseUrl}/${locale}/public-lists`,
+      languages: languageAlternates,
     },
     openGraph: {
       title: `${tLists('title')} | Synaply`,

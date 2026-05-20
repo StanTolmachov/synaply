@@ -1,4 +1,5 @@
 import React from 'react';
+import { languages } from '@/lib/languages';
 import TermsOfServiceClient from './TermsOfServiceClient';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -7,12 +8,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'common' });
   const baseUrl = "https://synaply.me";
+
+  const languageAlternates: Record<string, string> = {};
+  Object.keys(languages).forEach((langCode) => {
+    const code = langCode.toLowerCase();
+    languageAlternates[code] = `${baseUrl}/${code}/terms`;
+  });
+  languageAlternates['x-default'] = `${baseUrl}/terms`;
   
   return {
     title: `${t('terms')} | Synaply`,
     description: 'Terms of Service and Privacy Policy for Synaply.',
     alternates: {
       canonical: `${baseUrl}/${locale}/terms`,
+      languages: languageAlternates,
     },
     openGraph: {
       title: `${t('terms')} | Synaply`,

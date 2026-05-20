@@ -6,7 +6,7 @@ import { ArrowLeft, BookOpen, Plus, Star, Sparkles, GraduationCap, List, Lightbu
 import { useTranslation } from '@/components/I18nContext';
 
 const HelpPageClient = () => {
-  const { t } = useTranslation();
+  const { t, tHtml } = useTranslation();
 
   return (
     <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
@@ -36,15 +36,15 @@ const HelpPageClient = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                 <div className="bg-white/50 dark:bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20 shadow-sm">
                   <div className="text-2xl font-bold mb-2 text-synaply-blue dark:text-white">{t('help.best_practice.step1_title')}</div>
-                  <p className="text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: t('help.best_practice.step1_desc') }} />
+                  <p className="text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: tHtml('help.best_practice.step1_desc') }} />
                 </div>
                 <div className="bg-white/50 dark:bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20 shadow-sm">
                   <div className="text-2xl font-bold mb-2 text-synaply-blue dark:text-white">{t('help.best_practice.step2_title')}</div>
-                  <p className="text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: t('help.best_practice.step2_desc') }} />
+                  <p className="text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: tHtml('help.best_practice.step2_desc') }} />
                 </div>
                 <div className="bg-white/50 dark:bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20 shadow-sm">
                   <div className="text-2xl font-bold mb-2 text-synaply-blue dark:text-white">{t('help.best_practice.step3_title')}</div>
-                  <p className="text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: t('help.best_practice.step3_desc') }} />
+                  <p className="text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: tHtml('help.best_practice.step3_desc') }} />
                 </div>
               </div>
             </div>
@@ -91,7 +91,7 @@ const HelpPageClient = () => {
                   <div>
                     <h3 className="font-bold text-gray-900 dark:text-gray-100 text-lg mb-1">{item.title}</h3>
                     {item.isHtml ? (
-                      <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: item.desc }} />
+                      <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: tHtml(item.desc) }} />
                     ) : (
                       <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{item.desc}</p>
                     )}
@@ -122,7 +122,7 @@ const HelpPageClient = () => {
                   ].map((step, idx) => (
                     <li key={idx} className="flex items-center">
                       <div className="w-1.5 h-1.5 rounded-full bg-green-500 mr-3 shrink-0" />
-                      <span dangerouslySetInnerHTML={{ __html: step }} />
+                      <span dangerouslySetInnerHTML={{ __html: tHtml(step) }} />
                     </li>
                   ))}
                 </ul>
@@ -151,7 +151,7 @@ const HelpPageClient = () => {
                   ].map((step, idx) => (
                     <li key={idx} className="flex items-start text-sm text-gray-600 dark:text-gray-400">
                       <span className="font-bold text-purple-600 mr-3">{idx + 1}.</span>
-                      <span dangerouslySetInnerHTML={{ __html: step }} />
+                      <span dangerouslySetInnerHTML={{ __html: tHtml(step) }} />
                     </li>
                   ))}
                 </ol>
@@ -166,9 +166,9 @@ const HelpPageClient = () => {
               {t('help.dictionary_management.title')}
             </h2>
             <div className="space-y-4 text-gray-600 dark:text-gray-400 text-sm">
-              <p className="flex items-center p-3 bg-white/30 dark:bg-gray-800/30 rounded-xl" dangerouslySetInnerHTML={{ __html: `<span class="mr-3 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>` + t('help.dictionary_management.search') }} />
-              <p className="flex items-center p-3 bg-white/30 dark:bg-gray-800/30 rounded-xl" dangerouslySetInnerHTML={{ __html: `<span class="mr-3 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg></span>` + t('help.dictionary_management.sorting') }} />
-              <p className="flex items-center p-3 bg-white/30 dark:bg-gray-800/30 rounded-xl" dangerouslySetInnerHTML={{ __html: `<span class="mr-3 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm text-red-500"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-circle"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></span>` + t('help.dictionary_management.delete_all') }} />
+              <p className="flex items-center p-3 bg-white/30 dark:bg-gray-800/30 rounded-xl" dangerouslySetInnerHTML={{ __html: `<span class="mr-3 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>` + tHtml('help.dictionary_management.search') }} />
+              <p className="flex items-center p-3 bg-white/30 dark:bg-gray-800/30 rounded-xl" dangerouslySetInnerHTML={{ __html: `<span class="mr-3 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg></span>` + tHtml('help.dictionary_management.sorting') }} />
+              <p className="flex items-center p-3 bg-white/30 dark:bg-gray-800/30 rounded-xl" dangerouslySetInnerHTML={{ __html: `<span class="mr-3 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm text-red-500"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-circle"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></span>` + tHtml('help.dictionary_management.delete_all') }} />
             </div>
           </section>
 

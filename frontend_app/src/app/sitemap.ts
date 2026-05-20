@@ -29,21 +29,48 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Добавляем основные страницы для каждой локали
   locales.forEach((locale) => {
     staticRoutes.forEach((route) => {
+      const languageAlternates: Record<string, string> = {};
+      locales.forEach((l) => {
+        languageAlternates[l] = `${baseUrl}/${l}${route}`;
+      });
+      // x-default points to the root/canonical URL (which redirects)
+      const xDefault = `${baseUrl}${route}`;
+
       sitemapItems.push({
         url: `${baseUrl}/${locale}${route}`,
         lastModified: new Date(),
         changeFrequency: route === '' ? 'daily' : 'weekly',
         priority: route === '' ? 1.0 : 0.7,
+        // @ts-ignore - Next.js supports alternates in sitemap since 14.2
+        alternates: {
+          languages: {
+            ...languageAlternates,
+            'x-default': xDefault
+          }
+        }
       });
     });
 
     // Добавляем динамические ссылки на публичные списки
     publicLists.forEach((list: any) => {
+      const languageAlternates: Record<string, string> = {};
+      locales.forEach((l) => {
+        languageAlternates[l] = `${baseUrl}/${l}/public-lists/${list.id}`;
+      });
+      const xDefault = `${baseUrl}/public-lists/${list.id}`;
+
       sitemapItems.push({
         url: `${baseUrl}/${locale}/public-lists/${list.id}`,
         lastModified: new Date(list.created_at || new Date()),
         changeFrequency: 'monthly',
         priority: 0.6,
+        // @ts-ignore
+        alternates: {
+          languages: {
+            ...languageAlternates,
+            'x-default': xDefault
+          }
+        }
       });
     });
   });

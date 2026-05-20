@@ -22,6 +22,9 @@ WORKDIR /app
 COPY --from=builder /app/app .
 COPY --from=builder /app/migrations ./migrations
 
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+
 EXPOSE 8080
 
 CMD ["./app"]

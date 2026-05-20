@@ -2,18 +2,26 @@ import React from 'react';
 import HelpPageClient from './HelpPageClient';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { languages } from '@/lib/languages';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'common' });
   const tHelp = await getTranslations({ locale, namespace: 'help' });
   const baseUrl = "https://synaply.me";
+
+  const languageAlternates: Record<string, string> = {};
+  Object.keys(languages).forEach((langCode) => {
+    const code = langCode.toLowerCase();
+    languageAlternates[code] = `${baseUrl}/${code}/help`;
+  });
+  languageAlternates['x-default'] = `${baseUrl}/help`;
   
   return {
     title: `${tHelp('title')} | Synaply`,
     description: 'Learn how to use Synaply effectively with our help guide.',
     alternates: {
       canonical: `${baseUrl}/${locale}/help`,
+      languages: languageAlternates,
     },
     openGraph: {
       title: `${tHelp('title')} | Synaply`,

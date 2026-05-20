@@ -19,6 +19,8 @@ RUN npm run build
 # Stage 2: Runtime
 FROM node:20-alpine AS runner
 
+RUN apk add --no-cache curl
+
 WORKDIR /app
 
 # Set production environment
@@ -30,6 +32,9 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/next.config.ts ./
+
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhost:3000/ || exit 1
 
 EXPOSE 3000
 

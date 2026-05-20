@@ -48,26 +48,30 @@ func (p *wordsPostgres) Create(ctx context.Context, req modelsDB.CreateReq) (*mo
 
 func (p *wordsPostgres) GetLessonWords(ctx context.Context, userID uuid.UUID) ([]modelsDB.LessonDB, error) {
 	query := `
-	WITH
-	new_words AS (
-		-- Take 3 new words (State = 0)
-		SELECT id, source_word, target_word, comment, source_lang, target_lang, due, stability, difficulty, elapsed_days, scheduled_days, reps, lapses, state, last_review
-		FROM words
-		WHERE user_id = $1 AND state = 0
-		ORDER BY created_at ASC
-		LIMIT 3
-	),
-	review_words AS (
-		-- Take 7 words that are already in the process of learning (State != 0)
-		SELECT id, source_word, target_word, comment, source_lang, target_lang, due, stability, difficulty, elapsed_days, scheduled_days, reps, lapses, state, last_review
-		FROM words
-		WHERE user_id = $1 AND state != 0
-		ORDER BY due ASC -- MAGIC HERE: First those that are long overdue for review
-		LIMIT 7
-	)
-	SELECT * FROM new_words
-	UNION ALL 
-	SELECT * FROM review_words;
+SELECT 
+    id, source_word, target_word, comment, source_lang, target_lang, 
+    due, stability, difficulty, elapsed_days, scheduled_days, 
+    reps, lapses, state, last_review
+FROM words
+WHERE user_id = $1 
+  AND (
+      -- Кандидат 1: Слова на повторение, чье время УЖЕ ПРИШЛО (due <= сейчас)
+      (state != 0 AND due <= NOW()) 
+      OR 
+      -- Кандидат 2: Абсолютно новые слова
+      (state = 0)
+  )
+ORDER BY 
+    -- МАГИЯ ЗДЕСЬ: Присваиваем приоритеты.
+    -- Сначала берем слова на повторение (приоритет 1), затем новые (приоритет 2)
+    CASE WHEN state != 0 THEN 1 ELSE 2 END ASC,
+    
+    -- Внутри группы повторения сортируем так, чтобы самые "просроченные" шли первыми
+    due ASC,
+    
+    -- Внутри группы новых слов сортируем по дате добавления (старые добавленные первыми)
+    created_at ASC
+LIMIT 10;
 	`
 
 	//todo
@@ -283,14 +287,17 @@ func (p *wordsPostgres) UpdateWordFields(ctx context.Context, req modelsDB.Updat
 
 func (p *wordsPostgres) GetWordsForGemini(ctx context.Context, req *modelsDB.WordsForGeminiReq) ([]modelsDB.WordsForGeminiResp, error) {
 	query := `
-select source_word, target_word
-from words
-where user_id = $1
-and source_lang = $2
-and target_lang = $3
-order by due asc 
-limit 500
-`
+	SELECT source_word, target_word
+	FROM words
+	WHERE user_id = $1
+	  AND source_lang = $2
+	  AND target_lang = $3
+	  AND state = 2 
+	ORDER BY 
+	  stability DESC, 
+	  lapses ASC     
+	LIMIT 500         
+	`
 	var resp []modelsDB.WordsForGeminiResp
 	err := p.db.db.SelectContext(ctx, &resp, query, req.UserID, req.SourceLang, req.TargetLang)
 	if err != nil {

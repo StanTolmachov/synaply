@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { languages } from '@/lib/languages';
 import PublicListDetailClient from './PublicListDetailClient';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
@@ -20,7 +21,6 @@ async function getPublicList(id: string) {
 export async function generateMetadata({ params }: { params: Promise<{ id: string, locale: string }> }): Promise<Metadata> {
   const { id, locale } = await params;
   const list = await getPublicList(id);
-  const t = await getTranslations({ locale, namespace: 'common' });
   
   if (!list) {
     return {
@@ -30,11 +30,19 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   const baseUrl = "https://synaply.me";
 
+  const languageAlternates: Record<string, string> = {};
+  Object.keys(languages).forEach((langCode) => {
+    const code = langCode.toLowerCase();
+    languageAlternates[code] = `${baseUrl}/${code}/public-lists/${id}`;
+  });
+  languageAlternates['x-default'] = `${baseUrl}/public-lists/${id}`;
+
   return {
     title: `${list.title} | Synaply`,
     description: list.description || `Explore this public word list: ${list.title} (${list.source_lang} to ${list.target_lang})`,
     alternates: {
       canonical: `${baseUrl}/${locale}/public-lists/${id}`,
+      languages: languageAlternates,
     },
     openGraph: {
       title: `${list.title} | Synaply`,
