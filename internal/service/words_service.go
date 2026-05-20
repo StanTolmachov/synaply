@@ -160,12 +160,16 @@ func (s *wordsService) LessonStart(ctx context.Context, userID uuid.UUID) (*mode
 		return nil, fmt.Errorf("failed to set lesson: %w", err)
 	}
 
-	id := FindMinIdx(LessonWords)
+	id, err := FindMinIdx(LessonWords)
+	if err != nil {
+		return nil, fmt.Errorf("lesson is empty or all words locked: %w", err)
+	}
+
 	nextWordDB := LessonWords[id]
 	resp := models.LessonWordToResponse(&nextWordDB)
 	slogger.Log.DebugContext(ctx, "successfully created lesson", "next word:", nextWordDB)
 
-	return resp, err
+	return resp, nil
 }
 
 func (s *wordsService) CheckAnswer(ctx context.Context, req models.AnswerReq, userID uuid.UUID) (bool, *models.Response, error) {
@@ -332,14 +336,16 @@ func (s *wordsService) GetNextWordFromCache(ctx context.Context, userID uuid.UUI
 	}
 	slogger.Log.DebugContext(ctx, "GetNextWordFromCache lesson from cache", "lesson", lesson)
 
-	id := FindMinIdx(lesson)
-	if id == "" {
-		slogger.Log.DebugContext(ctx, "GetNextWordFromCache: lesson finished (all words answered)")
-		return nil, models.ErrNoWordsForLesson
+	id, err := FindMinIdx(lesson)
+	if err != nil {
+		slogger.Log.DebugContext(ctx, "GetNextWordFromCache: lesson finished (all words answered or locked)")
+		return nil, err
 	}
 	word, exists := lesson[id]
 	if !exists {
-		slogger.Log.DebugContext(ctx, "GetNextWordFromCache is not exists")
+		errNotFound := errors.New("word not found in cache payload")
+		slogger.Log.DebugContext(ctx, "GetNextWordFromCache is not exists", "error", errNotFound)
+		return nil, errNotFound
 	}
 
 	slogger.Log.DebugContext(ctx, "GetNextWordFromCache is finished ", "word:", word)
@@ -347,9 +353,10 @@ func (s *wordsService) GetNextWordFromCache(ctx context.Context, userID uuid.UUI
 	return &word, nil
 }
 
-func FindMinIdx(lesson map[string]models.Lesson) string {
+func FindMinIdx(lesson map[string]models.Lesson) (string, error) {
 	minIdx := math.MaxInt32
 	var nextWordID string
+	found := false
 	for key, word := range lesson {
 		if word.FSRSLocked {
 			continue
@@ -357,10 +364,15 @@ func FindMinIdx(lesson map[string]models.Lesson) string {
 		if word.Index < minIdx {
 			minIdx = word.Index
 			nextWordID = key
+			found = true
 		}
 	}
 
-	return nextWordID
+	if !found {
+		return "", errors.New("no unlocked words ready for review")
+	}
+
+	return nextWordID, nil
 }
 
 func (s *wordsService) Finish(ctx context.Context, userID uuid.UUID) error {
