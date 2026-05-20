@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	chimiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
@@ -14,6 +15,7 @@ import (
 func RegisterRoutes(h *Handler, jwtSecret string) *chi.Mux {
 	r := chi.NewRouter()
 
+	r.Use(chimiddleware.RealIP)
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{
 			"https://synaply.me",
