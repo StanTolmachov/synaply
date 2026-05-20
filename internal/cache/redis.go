@@ -18,7 +18,7 @@ type Client struct {
 }
 
 type CacheRepositoryI interface {
-	Set(ctx context.Context, key string, value interface{}) error
+	Set(ctx context.Context, key string, value interface{}, ttl time.Duration) error
 	Get(ctx context.Context, key string) (string, error)
 	Del(ctx context.Context, key string) error
 	Close() error
@@ -46,8 +46,11 @@ func NewRedisClient(cfg config.Redis) (*Client, error) {
 	}, nil
 }
 
-func (c *Client) Set(ctx context.Context, key string, value interface{}) error {
-	return c.rdb.Set(ctx, key, value, c.ttl).Err()
+func (c *Client) Set(ctx context.Context, key string, value interface{}, ttl time.Duration) error {
+	if ttl == 0 {
+		ttl = c.ttl
+	}
+	return c.rdb.Set(ctx, key, value, ttl).Err()
 }
 
 func (c *Client) Get(ctx context.Context, key string) (string, error) {

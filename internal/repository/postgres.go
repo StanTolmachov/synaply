@@ -23,8 +23,8 @@ func NewPostgres(cfg config.DB) (*Postgres, error) {
 		return nil, fmt.Errorf("error connecting to postgres: %w", err)
 	}
 
-	db.SetMaxOpenConns(50)
-	db.SetMaxIdleConns(50)
+	db.SetMaxOpenConns(30)
+	db.SetMaxIdleConns(30)
 	db.SetConnMaxLifetime(5 * time.Minute)
 
 	p := &Postgres{db: db}

@@ -154,7 +154,7 @@ func (s *wordsService) LessonStart(ctx context.Context, userID uuid.UUID) (*mode
 		return nil, fmt.Errorf("failed to marshal lesson: %w", err)
 	}
 
-	err = s.cache.Set(ctx, key, val)
+	err = s.cache.Set(ctx, key, val, 15*time.Minute)
 	if err != nil {
 		slogger.Log.ErrorContext(ctx, "failed to cache lesson", "key", key, "error", err)
 		return nil, fmt.Errorf("failed to set lesson: %w", err)
@@ -280,7 +280,7 @@ func (s *wordsService) CheckAnswer(ctx context.Context, req models.AnswerReq, us
 	if err != nil {
 		return isCorrect, nil, fmt.Errorf("failed to marshal lesson: %w", err)
 	}
-	err = s.cache.Set(ctx, key, val)
+	err = s.cache.Set(ctx, key, val, 15*time.Minute)
 	if err != nil {
 		slogger.Log.ErrorContext(ctx, "failed to cache lesson", "key", key, "error", err)
 	}
@@ -458,7 +458,7 @@ func (s *wordsService) StartPracticeWithGemini(ctx context.Context, req *gemini.
 	if err != nil {
 		return nil, err
 	}
-	err = s.cache.Set(ctx, key, val)
+	err = s.cache.Set(ctx, key, val, 15*time.Minute)
 	if errors.Is(err, cache.ErrCacheMiss) {
 		slogger.Log.DebugContext(ctx, "GetNextWordFromCache is cache miss")
 	}
