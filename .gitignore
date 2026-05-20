@@ -10,3 +10,4 @@
 
 .env
 docker-compose.override.yml
+.junie/
