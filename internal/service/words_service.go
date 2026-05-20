@@ -333,6 +333,10 @@ func (s *wordsService) GetNextWordFromCache(ctx context.Context, userID uuid.UUI
 	slogger.Log.DebugContext(ctx, "GetNextWordFromCache lesson from cache", "lesson", lesson)
 
 	id := FindMinIdx(lesson)
+	if id == "" {
+		slogger.Log.DebugContext(ctx, "GetNextWordFromCache: lesson finished (all words answered)")
+		return nil, models.ErrNoWordsForLesson
+	}
 	word, exists := lesson[id]
 	if !exists {
 		slogger.Log.DebugContext(ctx, "GetNextWordFromCache is not exists")
@@ -347,7 +351,9 @@ func FindMinIdx(lesson map[string]models.Lesson) string {
 	minIdx := math.MaxInt32
 	var nextWordID string
 	for key, word := range lesson {
-
+		if word.FSRSLocked {
+			continue
+		}
 		if word.Index < minIdx {
 			minIdx = word.Index
 			nextWordID = key
